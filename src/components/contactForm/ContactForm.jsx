@@ -12,11 +12,8 @@ export function ContactForm({ addNewContact }) {
   const formInfo = { name, number };
 
   function handleChange({ currentTarget: { name, value } }) {
-    if (name === 'name') {
-      setName(value);
-    } else if (name === 'number') {
-      setNumber(value);
-    }
+    if (name === 'name') setName(value);
+    if (name === 'number') setNumber(value);
   }
 
   function reset() {

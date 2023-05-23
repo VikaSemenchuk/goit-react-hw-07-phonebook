@@ -4,14 +4,15 @@ import { ContactForm } from './contactForm/ContactForm';
 import { ContactList } from './contactList/ContactList';
 import { Filter } from './filter/Filter';
 import { useDispatch, useSelector } from 'react-redux';
-import { setContacts, setFilter } from 'redux/contacts/contactsSlice';
+import { setContacts } from 'redux/contacts/contactsSlice';
+import { selectContacts, selectFilter } from 'redux/contacts/selectors';
 
 export const App = () => {
-  const contacts = useSelector(state => state.contactData.contacts);
-  const filter = useSelector(state => state.contactData.filter);
+  const contacts = useSelector(selectContacts);
+  const filter = useSelector(selectFilter);
 
   const dispatch = useDispatch();
-
+ 
   function addNewContact(data) {
     const newContact = {
       id: nanoid(),
@@ -29,7 +30,6 @@ export const App = () => {
       alert(`Contact ${newContact.name} is already exists!`);
       return;
     }
-
     dispatch(setContacts([...contacts, newContact]));
   }
 
@@ -38,10 +38,6 @@ export const App = () => {
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedContact)
     );
-  }
-
-  function onChangeFilter({ currentTarget: { value } }) {
-    dispatch(setFilter(value));
   }
 
   function deleteContact(contactId) {
@@ -63,7 +59,7 @@ export const App = () => {
 
           {contacts.length !== 0 ? (
             <>
-              <Filter filter={filter} onChangeFilter={onChangeFilter} />
+              <Filter />
               <ContactList
                 contacts={getFilteredContacts()}
                 deleteContact={deleteContact}
