@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { nanoid } from 'nanoid';
 
 const initialState = {
   contacts: [
@@ -19,10 +20,20 @@ const contactsSlice = createSlice({
   initialState,
   // Об'єкт редюсерів
   reducers: {
-    setContacts(state, action) {
-      state.contacts = action.payload;
+    addContact: {
+      prepare: newContact => {
+        return { ...newContact, id: nanoid() };
+      },
+      reducer: (state, action) => {
+        state.contacts = [...state.contacts, action.payload];
+      },
     },
-    setFilter(state, action) {
+    deleteContact: (state, action) => {
+      state.contacts = state.contacts.filter(
+        contact => contact.id !== action.payload
+      );
+    },
+    changeFilter(state, action) {
       state.filter = action.payload;
     },
     toggleLoading(state, action) {
@@ -35,7 +46,12 @@ const contactsSlice = createSlice({
 });
 
 // Генератори екшенів
-export const { setContacts, setFilter, toggleLoading, setError } =
-  contactsSlice.actions;
+export const {
+  addContact,
+  deleteContact,
+  changeFilter,
+  toggleLoading,
+  setError,
+} = contactsSlice.actions;
 // Редюсер слайсу
 export const contactsReducer = contactsSlice.reducer;
