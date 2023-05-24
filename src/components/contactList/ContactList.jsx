@@ -5,20 +5,16 @@ import { selectContacts, selectFilter } from 'redux/contacts/selectors';
 export const ContactList = () => {
   const contacts = useSelector(selectContacts);
   const filter = useSelector(selectFilter);
-
-  const getFilteredContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().trim().includes(filter.toLowerCase().trim())
+  // console.log('contacts :>> ', contacts);
+  const filteredContacts = contacts.filter(el =>
+    el.name.toLowerCase().trim().includes(filter.toLowerCase())
   );
-
+  // console.log('getFilteredContacts :>> ', filteredContacts);
   return (
     <ul>
-      {getFilteredContacts.map(contact => (
-        <li key={contact.id}>
-          <ContactItems
-            id={contact.id}
-            name={contact.name}
-            number={contact.number}
-          />
+      {filteredContacts.map(({ id, name, number }) => (
+        <li key={id}>
+          <ContactItems id={id} name={name} number={number} />
         </li>
       ))}
     </ul>

@@ -11,29 +11,25 @@ export function ContactForm() {
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
 
-  const nameId = nanoid();
-  const numberId = nanoid();
-
+  
   function handleChange({ currentTarget: { name, value } }) {
     if (name === 'name') setName(value);
     if (name === 'number') setNumber(value);
   }
- 
   
   function handleSubmit(e) {
     e.preventDefault();
-    const contactExisting = contacts.some(
-      contact =>
-      contact.name.toLowerCase().trim() ===
-      name.toLowerCase().trim()
+    
+    const contactExisted = contacts.some(
+      contact => contact.name.toLowerCase().trim() === name.toLowerCase().trim()
       );
       
-      if (contactExisting) {
+      if (contactExisted) {
         alert(`Contact ${name} is already exists!`);
         return;
       }
       
-      dispatch(addContact({name: name.trim(), number, id: nanoid()}));;
+      dispatch(addContact({ name: name.trim(), number }));
       reset();
     }
     
@@ -41,6 +37,8 @@ export function ContactForm() {
       setName('');
       setNumber('');
     }
+    const nameId = nanoid();
+    const numberId = nanoid();
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-3">

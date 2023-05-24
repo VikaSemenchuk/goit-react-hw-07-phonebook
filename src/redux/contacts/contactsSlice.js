@@ -22,10 +22,10 @@ const contactsSlice = createSlice({
   reducers: {
     addContact: {
       prepare: newContact => {
-        return { ...newContact, id: nanoid() };
+        return { payload: { ...newContact, id: nanoid() }};
       },
       reducer: (state, action) => {
-        state.contacts = [...state.contacts, action.payload];
+        state.contacts = [action.payload, ...state.contacts];
       },
     },
     deleteContact: (state, action) => {
