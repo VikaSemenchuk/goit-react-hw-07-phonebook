@@ -20,11 +20,11 @@ export function ContactForm() {
   function handleSubmit(e) {
     e.preventDefault();
     
-    const contactExisted = contacts.some(
+    const isExistContact = contacts.some(
       contact => contact.name.toLowerCase().trim() === name.toLowerCase().trim()
       );
       
-      if (contactExisted) {
+      if (isExistContact) {
         alert(`Contact ${name} is already exists!`);
         return;
       }
