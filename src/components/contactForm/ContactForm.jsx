@@ -1,44 +1,46 @@
 import { useState } from 'react';
-import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contacts/contactsSlice';
 import { selectContacts } from 'redux/contacts/selectors';
+import { nanoid } from '@reduxjs/toolkit';
+import { addContact } from 'redux/contacts/operations';
+import { toast } from 'react-toastify';
 
 export function ContactForm() {
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState('');
 
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
 
-  
   function handleChange({ currentTarget: { name, value } }) {
     if (name === 'name') setName(value);
-    if (name === 'number') setNumber(value);
+    if (name === 'number') setPhone(value);
   }
-  
+
   function handleSubmit(e) {
     e.preventDefault();
-    
+
     const isExistContact = contacts.some(
       contact => contact.name.toLowerCase().trim() === name.toLowerCase().trim()
-      );
-      
-      if (isExistContact) {
-        alert(`Contact ${name} is already exists!`);
-        return;
-      }
-      
-      dispatch(addContact({ name: name.trim(), number }));
-      reset();
+    );
+
+    if (isExistContact) {
+      toast.warning(`Contact ${name} is already exists!`);
+      return;
     }
-    
-    function reset() {
-      setName('');
-      setNumber('');
-    }
-    const nameId = nanoid();
-    const numberId = nanoid();
+
+    dispatch(addContact({ name: name.trim(), phone, id: nanoid() }));
+    toast.success(`Contact ${name} successful existed!`);
+
+    reset();
+  }
+
+  function reset() {
+    setName('');
+    setPhone('');
+  }
+  const nameId = nanoid();
+  const numberId = nanoid();
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-3">
@@ -66,9 +68,9 @@ export function ContactForm() {
           name="number"
           className="form-control"
           id={numberId}
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,2}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          value={number}
+          value={phone}
           onChange={handleChange}
           required
         />
